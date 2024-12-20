@@ -5,24 +5,24 @@ blueprint:
   domain: template
   source_url: http://example.com # used for updates
   input:
-    - energy_sensor:
-        name: Energy sensor to be monitored
-        description: The energy sensor which is monitored against the threshold
-        selector:
-          entity:
-            domain: sensor
-     - threshhold_delay:
-        name: threshhold time
-        description: Time to leave on after last detected.
-        default: 120
-        selector:
-          number:
-            min: 0
-            max: 3600
-            unit_of_measurement: seconds
+    energy_sensor:
+      name: Energy sensor to be monitored
+      description: The energy sensor which is monitored against the threshold
+      selector:
+        entity:
+          domain: sensor
+    threshhold_delay:
+      name: threshhold time
+      description: Time to leave on after last detected.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
 variables:
-  - energy_sensor: !input energy_sensor
-  - threshhold_delay: !input threshhold_delay
+  energy_sensor: !input energy_sensor
+  threshhold_delay: !input threshhold_delay
 binary_sensor:
   state: >
     {% if expand(energy_sensor) | map(attribute='state') | map('float') | sum > states('input_number.dryer_on_threshold') | float %}
